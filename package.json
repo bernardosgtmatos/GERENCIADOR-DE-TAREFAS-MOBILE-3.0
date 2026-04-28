@@ -1,4 +1,3 @@
-cat > package.json << 'EOF'
 {
   "name": "organizador-tarefas",
   "version": "1.0.0",
@@ -18,4 +17,3 @@ cat > package.json << 'EOF'
     "@capacitor/cli": "^5.7.0"
   }
 }
-EOF
