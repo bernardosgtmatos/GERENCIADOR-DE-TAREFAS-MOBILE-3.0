@@ -1,0 +1,78 @@
+cat > .github/workflows/build-apk.yml << 'EOF'
+name: Build APK
+
+on:
+  # Executa quando você fizer push na branch main
+  push:
+    branches: [ main ]
+  
+  # Executa quando você criar uma tag (versão)
+  push:
+    tags:
+      - 'v*'
+  
+  # Permite executar manualmente pela interface do GitHub
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 1. Baixar o código do repositório
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    # 2. Configurar Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    # 3. Configurar Java 17 (compatível com Gradle)
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    
+    # 4. Instalar dependências do npm
+    - name: Install dependencies
+      run: npm install
+    
+    # 5. Criar pasta www e copiar index.html
+    - name: Prepare web assets
+      run: |
+        mkdir -p www
+        cp index.html www/
+    
+    # 6. Adicionar plataforma Android
+    - name: Add Android platform
+      run: npx cap add android
+    
+    # 7. Sincronizar arquivos
+    - name: Sync Android
+      run: npx cap sync android
+    
+    # 8. Build do APK
+    - name: Build APK
+      run: |
+        cd android
+        chmod +x gradlew
+        ./gradlew assembleDebug
+    
+    # 9. Upload do APK como artefato
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-debug
+        path: android/app/build/outputs/apk/debug/app-debug.apk
+    
+    # 10. Upload do APK para a release (se for uma tag)
+    - name: Upload to Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: android/app/build/outputs/apk/debug/app-debug.apk
+        generate_release_notes: true
+EOF
