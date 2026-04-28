@@ -1,0 +1,18 @@
+cat > capacitor.config.json << 'EOF'
+{
+  "appId": "com.organizador.tarefas",
+  "appName": "Organizador Diário",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_icon_config_sample",
+      "iconColor": "#667eea",
+      "sound": "beep.wav"
+    }
+  }
+}
+EOF
