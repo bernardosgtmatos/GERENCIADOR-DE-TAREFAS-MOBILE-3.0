@@ -1,0 +1,21 @@
+cat > package.json << 'EOF'
+{
+  "name": "organizador-tarefas",
+  "version": "1.0.0",
+  "description": "App organizador de tarefas com alarmes nativos",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build needed'",
+    "sync": "npx cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^5.7.0",
+    "@capacitor/core": "^5.7.0",
+    "@capacitor/app": "^5.0.7",
+    "@capacitor/local-notifications": "^5.0.7"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^5.7.0"
+  }
+}
+EOF
